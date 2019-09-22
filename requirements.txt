@@ -1,0 +1,3 @@
+pycurl
+sphinx
+sphinx-rtd-theme

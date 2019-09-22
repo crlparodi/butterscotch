@@ -1,0 +1,140 @@
+# -*- coding: utf-8 -*-
+
+import json
+
+from ..database import database as database
+from ..network.downloader import get_query_data
+from ..utils.json_utils import get_json_from_file, get_data_from_json
+from ..utils.conversions import convert_human, convert_percent
+from .hardware import HardwareData
+
+
+class CPUModel(object):
+    """
+    Hardware Model representation of the CPU.
+    It contains and sends to the database the following datas: 
+
+        - ``cpu_nbr_cores``
+        - ``cpu_core_x_freq``
+        - ``cpu_core_x_max_freq``
+    """
+    def __init__(self):
+        """ Constructor method """
+        self.is_valid = True
+        self.nbr_cores = HardwareData('cpu_nbr_cores')
+        self.cores = []
+
+    def get_is_valid(self):
+        """ Return True if the data is considered as valid """
+        return self.is_valid
+    
+    def get_nbr_cores(self):
+        """ Return the number of cores from the CPU """
+        return self.nbr_cores
+
+    def get_cores(self):
+        """ Return the list of cores """
+        return self.cores
+
+    def set_is_valid(self, _is_valid):
+        """ Set True if the data is considered as valid, 
+        False if there's an error during the data retrieval.
+        """
+        self.is_valid = _is_valid
+    
+    def set_nbr_cores(self, _nbr_cores):
+        """ Set the number of cores from the CPU """
+        self.nbr_cores.set_value(_nbr_cores)
+
+    def set_cores(self, _cores):
+        """ Set a list of cores commonly to the number of cores from
+        the CPU
+        """
+        self.cores = _cores
+
+    def refresh_cores(self):
+        """ Refreshing the list of cores on each data update """
+        self.cores = []
+
+    def display_cpu_cores_freq(self):
+        """ Temporary method to display the CPU State - Frequency and % Frequency """
+        print("\n CPU \n")
+        for count in range(self.nbr_cores.get_value()):
+            print("Core ", count, " : ", convert_human(self.cores[count][0].get_value()), "Hz - ", convert_percent((self.cores[count][0].get_value() / self.cores[count][1].get_value()) * 100), " %", sep="")
+
+def init():
+    return CPUModel()
+
+def refresh(locator_repository):
+    get_query_data([
+        locator_repository['CPU-cores'],
+        locator_repository['CPU-freq'],
+        locator_repository['CPU-maxfreq']
+    ])
+
+def update(cpu, locator_repository):
+    return parse(cpu, locator_repository)
+
+def parse(cpu, locator_repository):
+    cpu_nbr_cores, cpu_core_freq, cpu_core_max_freq = {}, {}, {}
+    PARSE_SUCCEED = True
+
+    try:
+        cpu_nbr_cores = get_json_from_file(locator_repository['CPU-cores'][1])
+        cpu_core_freq = get_json_from_file(locator_repository['CPU-freq'][1])
+        cpu_core_max_freq = get_json_from_file(locator_repository['CPU-maxfreq'][1])
+    except json.JSONDecodeError as ejson:
+        print("JSONDecodeError -", ejson.msg)
+        PARSE_SUCCEED = False
+
+    if PARSE_SUCCEED:
+        return sets(cpu, cpu_nbr_cores, cpu_core_freq, cpu_core_max_freq)
+
+
+def sets(cpu, cpu_nbr_cores, cpu_core_freq, cpu_core_max_freq):
+    if cpu.get_cores():
+        cpu.refresh_cores()
+
+    try:
+        cpu.set_nbr_cores(get_data_from_json(cpu_nbr_cores, cpu.get_nbr_cores()))
+        cpu.set_cores(get_cpu_freq_data_from_json(
+            cpu_core_freq,
+            cpu_core_max_freq,
+            cpu.get_cores(),
+            cpu.get_nbr_cores().get_value()
+        ))
+    except json.JSONDecodeError as ejson:
+        print("JSONDecodeError -", ejson.msg)
+        cpu.set_is_valid(False)
+    
+    return cpu
+
+def get_cpu_freq_data_from_json(
+    frequency_data, 
+    max_frequency_data,
+    cores_list,
+    nbr_cores):
+
+    for core_count in range(nbr_cores):
+        cores_list.append((
+            HardwareData(_name = 'cpu_core_' + str(core_count) + '_freq', _value = frequency_data['data']['result'][core_count]['value'][1])),
+            HardwareData(_name = 'cpu_core_' + str(core_count) + '_max_freq', _value = eval(max_frequency_data['data']['result'][core_count]['value'][1])),
+        ))
+    
+    return cores_list
+
+
+def create_tables(cpu, db):
+    db_cursor = db.cursor()
+
+    database.create_table(db, db_cursor, cpu.get_nbr_cores().get_name())
+
+    for count in range(cpu.get_nbr_cores().get_value()):
+        database.create_table(db, db_cursor, cpu.get_cores()[count][0].get_name())
+
+def update_tables(cpu, db):
+    db_cursor = db.cursor()
+
+    database.insert_timestamp(db, db_cursor, cpu.nbr_cores)
+    for count in range(cpu.nbr_cores.get_value()):
+        database.insert_timestamp(db, db_cursor, cpu.cores[count][0])

@@ -1,0 +1,67 @@
+Thread CPU:
+☐ Construire le Widget Qt
+☐ Mettre à jour les données dans le widget
+☐ Implémentation d'un QThread (CPUWidget)
+☐ Implémentation du Thread Travailleur (CPUWidgetWorker)
+☐ Réaliser un cadencement du thread toutes les secondes
+
+Thread RAM:
+☐ Construire le Widget Qt
+☐ Mettre à jour les données dans le widget
+☐ Construire le Thread Travailleur
+☐ Réaliser un cadencement du thread toutes les secondes
+
+Thread Disk:
+☐ Construire le Widget Qt
+☐ Mettre à jour les données dans le widget
+☐ Construire le Thread Travailleur
+☐ Réaliser un cadencement du thread toutes les secondes
+
+Thread Network:
+☐ Construire le Widget Qt
+☐ Mettre à jour les données dans le widget
+☐ Construire le Thread Travailleur
+☐ Réaliser un cadencement du thread toutes les secondes
+
+Multithreadding:
+☐ Concurrencement des quatres opérations
+☐ Éviter l'arrêt du programme en cas de dysfonctionnement d'un thread
+
+Serveur:
+☐ Menu de changement du serveur
+☐ Récupérer les données temporelles dans le JSON
+☐ Rafraîchissement des JSONs
+☐ Rafraîchissement des métriques
+
+Autres Fonctionnalités:
+☐ Possibilité d'exporter les valeurs au format CSV
+    ☐ Compartimenter les valeurs
+    ☐ Réaliser une mise en mémoire sur une durée déterminée
+    ☐ Effacement / Rafraichissement de la mémoire
+    ☐ Sauvegarde dans un fichier CSV
+☐ Possibilité de récupérer le dmesg dans un fichier .log
+    ☐ Lancement de commandes Shell en C++
+    ☐ Parsing et storing
+☐ Menu Principal
+    ☐ Fichier - Quitter / Exporter au format CSV / Log de "dmesg"
+    ☐ Edit - Changer l'adresse du serveur
+    ☐ Help - À propos
+
+Base de données:
+    ☐ Apprendre le SQL
+    ☐ Mettre en place une base de données SQL
+    ☐ Mettre en place une interface de transmission des données en temps réel
+
+Structure de fichiers:
+☐ Générer les fichiers de configuration s'ils n'existent pas.
+
+Intégration Continue:
+☐ Mettre en place un thread Travis CI
+
+Testing:
+☐ Test unitaire (Asserts)
+☐ Test fonctionnel
+
+Compatibilité:
+☐ Compatibilité Debian / Raspberry Pi
+☐ Compatibilité Windows (?)  
