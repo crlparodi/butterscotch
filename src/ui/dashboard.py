@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from PyQt5 import QtWidgets, QtCore
-from .panel import PanelModel, PanelView
-from ..metrics.metric import MetricSet, MetricPostProcess
+from PyQt5 import QtWidgets
+from ..query.expressions import ExpressionParserResolver
 
 class Dashboard(QtWidgets.QMainWindow):
-    def __init__(self, _list, parent=None, *args, **kwargs):
+    def __init__(self, parent=None, *args, **kwargs):
         super(Dashboard, self).__init__(*args, **kwargs)
-        self.list = _list
+        self.list = []
         self.setGeometry(200, 200, 500, 300)
         self.setWindowTitle("butterscotch")
+
+        expr_parser = ExpressionParserResolver()
+        expr_parser.parse()
+        self.list = expr_parser.resolve()
 
         self.setUI()
 

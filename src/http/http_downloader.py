@@ -9,7 +9,7 @@ PROMETHEUS_API_LINK_SEGMENT = "/api/v1/query?query="
 
 def get_node_address():
     config_parser = configparser.ConfigParser()
-    config_parser.read('config/global.config.ini')
+    config_parser.read('config.ini')
     return config_parser['General']['node_address']
 
 class HTTPEngine(object):

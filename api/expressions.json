@@ -1,0 +1,184 @@
+{
+  "panels": [
+    {
+      "key": "CPU_NBR_CORES",
+      "desc": "Nbr of Cores",
+      "targets": [
+        {
+          "expr": "count(count(node_cpu_scaling_frequency_hertz)without(mode))by(instance)",
+          "type": "query",
+          "format": "number",
+          "unit": ""
+        }
+      ]
+    },
+    {
+      "key": "CPU_FREQ",
+      "desc": "CPU Frequency",
+      "targets": [
+        {
+          "expr": "node_cpu_scaling_frequency_hertz",
+          "type": "query-set",
+          "format": "number",
+          "decimals": 4,
+          "unit": "Hz"
+        }
+      ]
+    },
+    {
+      "key": "CPU_MAX_FREQ",
+      "desc": "CPU Max Frequency",
+      "targets": [
+        {
+          "expr": "node_cpu_frequency_max_hertz",
+          "type": "query-set",
+          "format": "number",
+          "decimals": 4,
+          "unit": "Hz"
+        }
+      ]
+    },
+    {
+      "key": "RAM_TOTAL",
+      "desc": "RAM Total",
+      "targets": [
+        {
+          "expr": "node_memory_MemTotal_bytes",
+          "type": "query",
+          "format": "number",
+          "decimals": 4,
+          "unit": "o"
+        }
+      ]
+    },
+    {
+      "key": "RAM_FREE",
+      "desc": "RAM Free",
+      "targets": [
+        {
+          "expr": "node_memory_MemFree_bytes",
+          "type": "query",
+          "format": "number",
+          "decimals": 4,
+          "unit": "o"
+        }
+      ]
+    },
+    {
+      "key": "RAM_BUFFER",
+      "desc": "RAM Buffer",
+      "targets": [
+        {
+          "expr": "node_memory_Buffers_bytes",
+          "type": "query",
+          "format": "number",
+          "decimals": 4,
+          "unit": "o"
+        }
+      ]
+    },
+    {
+      "key": "RAM_CACHED",
+      "desc": "RAM in Cache",
+      "targets": [
+        {
+          "expr": "node_memory_Cached_bytes",
+          "type": "query",
+          "format": "number",
+          "decimals": 4,
+          "unit": "o"
+        }
+      ]
+    },
+    {
+      "key": "SWAP_TOTAL",
+      "desc": "Total Swap",
+      "targets": [
+        {
+          "expr": "node_memory_SwapTotal_bytes",
+          "type": "query",
+          "format": "number",
+          "decimals": 4,
+          "unit": "o"
+        }
+      ]
+    },
+    {
+      "key": "SWAP_FREE",
+      "desc": "Free Swap",
+      "targets": [
+        {
+          "expr": "node_memory_SwapFree_bytes",
+          "type": "query",
+          "format": "number",
+          "decimals": 4,
+          "unit": "o"
+        }
+      ]
+    },
+    {
+      "key": "DISK_READ",
+      "desc": "Disk Read",
+      "targets": [
+        {
+          "expr": "rate(node_disk_read_bytes_total{device=\"sda\"}[10s])",
+          "type": "query",
+          "format": "rate",
+          "decimals": 4,
+          "unit": "o/s"
+        }
+      ]
+    },
+    {
+      "key": "DISK_WRITE",
+      "desc": "Disk Write",
+      "targets": [
+        {
+          "expr": "rate(node_disk_written_bytes_total{device=\"sda\"}[10s])",
+          "type": "query",
+          "format": "rate",
+          "decimals": 4,
+          "unit": "o/s"
+        }
+      ]
+    },
+    {
+      "key": "NETWORK_DEVICES",
+      "desc": "Network device number",
+      "targets": [
+        {
+          "expr": "count(node_network_device_id)by(instance)",
+          "type": "query-set",
+          "format": "number",
+          "unit": ""
+        }
+      ]
+    },
+    {
+      "key": "NETWORK_UP",
+      "desc": "Network uprate",
+      "targets": [
+        {
+          "expr": "rate(node_network_transmit_bytes_total[10s])",
+          "type": "query-set",
+          "format": "rate",
+          "decimals": 4,
+          "unit": "b/s"
+        }
+      ]
+    },
+    {
+      "key": "NETWORK_DOWN",
+      "desc": "Network downrate",
+      "targets": [
+        {
+          "expr": "rate(node_network_receive_bytes_total[10s])",
+          "type": "query-set",
+          "format": "rate",
+          "decimals": 4,
+          "unit": "b/s"
+        }
+      ]
+    }
+  ]
+}

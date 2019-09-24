@@ -2,7 +2,6 @@
 
 import pycurl
 import json
-from ..utils.json_utils import get_json_from_file
 from ..exceptions.exceptions import HTTPError, JSONDataError
 from .http_downloader import HTTPEngine
 
