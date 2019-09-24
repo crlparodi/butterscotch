@@ -1,8 +1,0 @@
-.. _utils.downloader:
-
-utils.downloader
-================
-
-.. automodule:: src.utils.downloader
-    :members:
-

@@ -98,6 +98,9 @@ class MetricSet(object):
     def get_data(self):
         return self.data
 
+    def set_exprs(self, _json_panel):
+        for target in _json_panel["targets"]:
+            self.exprs.append(target["expr"])
     def add_metric_data(self, _json_panel_target):
         self.data.append( _json_panel_target)
 
@@ -144,6 +147,7 @@ class MetricProcess(MetricObservable):
         downloader = HTTPEngine()
         for expr in self.set.get_exprs():
             hardware_json_data = json.load(downloader.download(PROMETHEUS_API_LINK_SEGMENT + expr))
+            print(hardware_json_data)
 
             try:
                 for result in hardware_json_data['data']['result']:
