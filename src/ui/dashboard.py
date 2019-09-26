@@ -67,13 +67,5 @@ class DashboardGenerator(object):
 
         self.boards.append(cpu_board)
 
-        """
-        if len(metric_set.get_data()) == 1:
-            self.board_list.append(Panel(metric_set))
-        else:
-            for index in range(len(metric_set.get_data())):
-                self.board_list.append(Panel(metric_set, index))
-        """
-
         return self.boards
 
