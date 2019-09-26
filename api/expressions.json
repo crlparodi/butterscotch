@@ -1,184 +1,105 @@
 {
-  "panels": [
-    {
-      "key": "CPU_NBR_CORES",
-      "desc": "Nbr of Cores",
-      "targets": [
-        {
-          "expr": "count(count(node_cpu_scaling_frequency_hertz)without(mode))by(instance)",
-          "type": "query",
-          "format": "number",
-          "unit": ""
-        }
-      ]
-    },
-    {
-      "key": "CPU_FREQ",
-      "desc": "CPU Frequency",
-      "targets": [
-        {
-          "expr": "node_cpu_scaling_frequency_hertz",
-          "type": "query-set",
-          "format": "number",
-          "decimals": 4,
-          "unit": "Hz"
-        }
-      ]
-    },
-    {
-      "key": "CPU_MAX_FREQ",
-      "desc": "CPU Max Frequency",
-      "targets": [
-        {
-          "expr": "node_cpu_frequency_max_hertz",
-          "type": "query-set",
-          "format": "number",
-          "decimals": 4,
-          "unit": "Hz"
-        }
-      ]
-    },
-    {
-      "key": "RAM_TOTAL",
-      "desc": "RAM Total",
-      "targets": [
-        {
-          "expr": "node_memory_MemTotal_bytes",
-          "type": "query",
-          "format": "number",
-          "decimals": 4,
-          "unit": "o"
-        }
-      ]
-    },
-    {
-      "key": "RAM_FREE",
-      "desc": "RAM Free",
-      "targets": [
-        {
-          "expr": "node_memory_MemFree_bytes",
-          "type": "query",
-          "format": "number",
-          "decimals": 4,
-          "unit": "o"
-        }
-      ]
-    },
-    {
-      "key": "RAM_BUFFER",
-      "desc": "RAM Buffer",
-      "targets": [
-        {
-          "expr": "node_memory_Buffers_bytes",
-          "type": "query",
-          "format": "number",
-          "decimals": 4,
-          "unit": "o"
-        }
-      ]
-    },
-    {
-      "key": "RAM_CACHED",
-      "desc": "RAM in Cache",
-      "targets": [
-        {
-          "expr": "node_memory_Cached_bytes",
-          "type": "query",
-          "format": "number",
-          "decimals": 4,
-          "unit": "o"
-        }
-      ]
-    },
-    {
-      "key": "SWAP_TOTAL",
-      "desc": "Total Swap",
-      "targets": [
-        {
-          "expr": "node_memory_SwapTotal_bytes",
-          "type": "query",
-          "format": "number",
-          "decimals": 4,
-          "unit": "o"
-        }
-      ]
-    },
-    {
-      "key": "SWAP_FREE",
-      "desc": "Free Swap",
-      "targets": [
-        {
-          "expr": "node_memory_SwapFree_bytes",
-          "type": "query",
-          "format": "number",
-          "decimals": 4,
-          "unit": "o"
-        }
-      ]
-    },
-    {
-      "key": "DISK_READ",
-      "desc": "Disk Read",
-      "targets": [
-        {
-          "expr": "rate(node_disk_read_bytes_total{device=\"sda\"}[10s])",
-          "type": "query",
-          "format": "rate",
-          "decimals": 4,
-          "unit": "o/s"
-        }
-      ]
-    },
-    {
-      "key": "DISK_WRITE",
-      "desc": "Disk Write",
-      "targets": [
-        {
-          "expr": "rate(node_disk_written_bytes_total{device=\"sda\"}[10s])",
-          "type": "query",
-          "format": "rate",
-          "decimals": 4,
-          "unit": "o/s"
-        }
-      ]
-    },
-    {
-      "key": "NETWORK_DEVICES",
-      "desc": "Network device number",
-      "targets": [
-        {
-          "expr": "count(node_network_device_id)by(instance)",
-          "type": "query-set",
-          "format": "number",
-          "unit": ""
-        }
-      ]
-    },
-    {
-      "key": "NETWORK_UP",
-      "desc": "Network uprate",
-      "targets": [
-        {
-          "expr": "rate(node_network_transmit_bytes_total[10s])",
-          "type": "query-set",
-          "format": "rate",
-          "decimals": 4,
-          "unit": "b/s"
-        }
-      ]
-    },
-    {
-      "key": "NETWORK_DOWN",
-      "desc": "Network downrate",
-      "targets": [
-        {
-          "expr": "rate(node_network_receive_bytes_total[10s])",
-          "type": "query-set",
-          "format": "rate",
-          "decimals": 4,
-          "unit": "b/s"
-        }
-      ]
-    }
-  ]
+  "cpu": {
+    "name": "CPU",
+    "panels": [
+      {
+        "key": "CPU_NBR_CORES",
+        "targets": [
+          {
+            "key": "CPU_NBR_CORES",
+            "expression": "count(count(node_cpu_scaling_frequency_hertz)without(mode))by(instance)"
+          }
+        ]
+      },
+      {
+        "key": "CPU_FREQ",
+        "targets": [
+          {
+            "key": "CPU_FREQ",
+            "expression": "node_cpu_scaling_frequency_hertz"
+          },
+          {
+            "key": "CPU_MAX_FREQ",
+            "expression": "node_cpu_frequency_max_hertz"
+          }
+        ]
+      }
+    ]
+  },
+  "memory": {
+    "name": "Memory",
+    "panels": [
+      {
+        "key": "RAM_USED",
+        "desc": "Used Ram",
+        "targets": [
+          {
+            "key": "TOTAL_RAM",
+            "expression": "node_memory_MemTotal_bytes"
+          },
+          {
+            "key": "FREE_RAM",
+            "expression": "node_memory_MemFree_bytes"
+          },
+          {
+            "key": "BUFF_RAM",
+            "expression": "node_memory_Buffers_bytes"
+          },
+          {
+            "key": "CACH_RAM",
+            "expression": "node_memory_Cached_bytes"
+          }
+        ]
+      },
+      {
+        "key": "SWAP_USED",
+        "desc": "Used Swap",
+        "targets": [
+          {
+            "key": "TOTAL_SWAP",
+            "expression": "node_memory_SwapTotal_bytes"
+          },
+          {
+            "key": "FREE_SWAP",
+            "expression": "node_memory_SwapFree_bytes"
+          }
+        ]
+      }
+    ]
+  },
+  "disk": {
+    "name": "Disk",
+    "panels": [
+      {
+        "key": "DISK_RRATE",
+        "desc": "Disk Read",
+        "targets": [
+          {
+            "key": "DISK_RRATE",
+            "expression": "rate(node_disk_read_bytes_total{device=\"sda\"}[10s])"
+          }
+        ]
+      },
+      {
+        "key": "DISK_WRATE",
+        "desc": "Disk Write",
+        "targets": [
+          {
+            "key": "DISK_WRATE",
+            "expression": "rate(node_disk_written_bytes_total{device=\"sda\"}[10s])"
+          }
+        ]
+      },
+      {
+        "key": "USED_ROOTFS",
+        "desc": "Used Root FileSystem",
+        "targets": [
+          {
+            "key": "USED_ROOTFS",
+            "expression": "rate(node_disk_written_bytes_total{device=\"sda\"}[10s])"
+          }
+        ]
+      }
+    ]
+  }
 }

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import decimal
-
 def convert_human(value):
     if value >= 1e03 and value < 1e06:
         value /= 1024

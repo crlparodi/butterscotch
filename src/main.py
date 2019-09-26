@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os, sys
-import configparser
 from PyQt5 import QtWidgets
 from src.http.http_check import http_address_verification
 from src.ui.dashboard import Dashboard

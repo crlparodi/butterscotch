@@ -1,53 +1,79 @@
+"""
+name: Cyril PARODI
+date: 24/09/2019
+module: dashboard.py
+"""
+
 # -*- coding: utf-8 -*-
 
-import sys
 from PyQt5 import QtWidgets
+from .board import Board
+from .panel import Panel
 from ..query.expressions import ExpressionParserResolver
 
 class Dashboard(QtWidgets.QMainWindow):
     def __init__(self, parent=None, *args, **kwargs):
         super(Dashboard, self).__init__(*args, **kwargs)
-        self.list = []
+        self.board_list = []
         self.setGeometry(200, 200, 500, 300)
-        self.setWindowTitle("butterscotch")
+        self.setWindowTitle("butterscotch - Dashboard")
 
         expr_parser = ExpressionParserResolver()
         expr_parser.parse()
-        self.list = expr_parser.resolve()
+        self.board_list = expr_parser.resolve()
 
-        self.setUI()
+        self.generator = DashboardGenerator()
+        self.dashboard_content = self.generator.generate_boards(self.board_list)
+        self.set_UI(self.dashboard_content)
 
-    def setUI(self):
+
+    def set_UI(self, _dashboard_content):
         dashboard_menu = self.menuBar()
         dashboard_central_widget = QtWidgets.QWidget()
         file_menu = dashboard_menu.addMenu("&Fichier")
+        edit_menu = dashboard_menu.addMenu("&Edit")
+        help_menu = dashboard_menu.addMenu("&Help")
         file_menu.addAction("Quitter")
 
-        panels = []
-        dbox = QtWidgets.QGridLayout()
+        dbox = QtWidgets.QVBoxLayout()
         dbox.setContentsMargins(20, 20, 20, 20)
 
-        for item in self.list:
-            for i in range(len(item.get_data())):
-                panel_box = QtWidgets.QWidget()
-                panel_layout = QtWidgets.QVBoxLayout()
-                panel_label = QtWidgets.QLabel(self)
-                panel_label.setText(item.get_query() + f"({i})")
-                panel_value = QtWidgets.QLabel(self)
-                panel_value.setText(item.get_data()[i].get_value())
-                panel_layout.addWidget(panel_label)
-                panel_layout.addWidget(panel_value)
-                panel_box.setLayout(panel_layout)
-                panels.append(panel_box)
-
-        x, y = 0, 0
-        for panel in panels:
-            dbox.addWidget(panel, y, x)
-            x += 1
-            if not x % 3:
-                y += 1
-                x = 0
+        for board in _dashboard_content:
+            dbox.addWidget(board)
 
         dashboard_central_widget.setLayout(dbox)
         self.setCentralWidget(dashboard_central_widget)
         self.show()
+
+
+class DashboardGenerator(object):
+    def __init__(self, *args, **kwargs):
+        self.boards = []
+
+    def generate_boards(self, _board_group):
+        xpos, ypos = 0, 0
+
+        cpu_board = Board(_board_group["CPU"], "CPU")
+        cpu_board.add_item(Panel(_board_group["CPU"]["CPU_NBR_CORES"]), 0, 0)
+
+        ypos = 1
+        for core_index in range(int(_board_group["CPU"]["CPU_NBR_CORES"][1])):
+            cpu_board.add_item(Panel(_board_group["CPU"][f"CPU_CORE_{core_index}_FREQ"]), xpos, ypos)
+            ypos += 1
+            if ypos % ((int(_board_group["CPU"]["CPU_NBR_CORES"][1]) / 2) + 1) == 0:
+                xpos += 1
+                ypos = 1
+        cpu_board.freeze_layout()
+
+        self.boards.append(cpu_board)
+
+        """
+        if len(metric_set.get_data()) == 1:
+            self.board_list.append(Panel(metric_set))
+        else:
+            for index in range(len(metric_set.get_data())):
+                self.board_list.append(Panel(metric_set, index))
+        """
+
+        return self.boards
+

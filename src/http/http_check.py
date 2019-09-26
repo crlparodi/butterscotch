@@ -3,7 +3,7 @@
 import pycurl
 import json
 from ..exceptions.exceptions import HTTPError, JSONDataError
-from .http_downloader import HTTPEngine
+from .http_request import HTTPEngine
 
 
 def http_address_verification():
@@ -33,7 +33,7 @@ def test_connection(addr):
     downloader = HTTPEngine()
 
     try:
-        str_io = downloader.download(addr)
+        str_io = downloader.request(addr)
         return str_io
 
     except pycurl.error as epycurl:

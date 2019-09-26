@@ -25,8 +25,8 @@ You can find all the references below:
 
    utils
    exceptions
-   network
-   widgets
+   http
+   metrics
 
 
 * :ref:`genindex`

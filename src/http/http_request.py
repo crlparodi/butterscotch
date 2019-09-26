@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import pycurl
-import json, configparser
+import configparser
 from io import BytesIO, StringIO
-from ..exceptions.exceptions import HTTPError
 
 PROMETHEUS_API_LINK_SEGMENT = "/api/v1/query?query="
 
@@ -20,7 +19,7 @@ class HTTPEngine(object):
     def __init__(self):
         self.http_node_address = get_node_address()
 
-    def download(self, query):
+    def request(self, query):
         """
         Download the content from a url given by the user and writes it
         on file from a provided path.

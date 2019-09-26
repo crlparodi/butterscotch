@@ -1,5 +1,5 @@
 import sqlite3
-import os, socket
+import socket
 
 def create_db():
     filename = "data/" + socket.gethostname() + ".db"

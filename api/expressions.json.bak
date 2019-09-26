@@ -1,0 +1,39 @@
+    {
+      "key": "NETWORK_DEVICES",
+      "desc": "Network device number",
+      "type": "query-set",
+      "targets": [
+        {
+          "expression": "count(node_network_device_id)by(instance)",
+          "format": "number",
+          "decimals": 2,
+          "unit": ""
+        }
+      ]
+    },
+    {
+      "key": "NETWORK_UP",
+      "desc": "Network uprate",
+      "type": "query-set",
+      "targets": [
+        {
+          "expression": "rate(node_network_transmit_bytes_total[10s])",
+          "format": "rate",
+          "decimals": 4,
+          "unit": "b/s"
+        }
+      ]
+    },
+    {
+      "key": "NETWORK_DOWN",
+      "desc": "Network downrate",
+      "type": "query-set",
+      "targets": [
+        {
+          "expression": "rate(node_network_receive_bytes_total[10s])",
+          "format": "rate",
+          "decimals": 4,
+          "unit": "b/s"
+        }
+      ]
+    }
