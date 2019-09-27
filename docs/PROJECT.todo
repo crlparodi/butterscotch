@@ -1,26 +1,29 @@
+Sur le tas:
+☐ Meilleure gestion des Boards (Voir suivant)
+☐ Prévoir une process en deux temps : Un pour l'initialisation générale, Un pour l'actualisation
+
 Thread CPU:
-☐ Construire le Widget Qt
+☐ Construire le Board Qt
 ☐ Mettre à jour les données dans le widget
 ☐ Implémentation d'un QThread (CPUWidget)
-☐ Implémentation du Thread Travailleur (CPUWidgetWorker)
 ☐ Réaliser un cadencement du thread toutes les secondes
 
 Thread RAM:
 ☐ Construire le Widget Qt
 ☐ Mettre à jour les données dans le widget
-☐ Construire le Thread Travailleur
+☐ Implémentation d'un QThread (CPUWidget)
 ☐ Réaliser un cadencement du thread toutes les secondes
 
 Thread Disk:
 ☐ Construire le Widget Qt
 ☐ Mettre à jour les données dans le widget
-☐ Construire le Thread Travailleur
+☐ Implémentation d'un QThread (CPUWidget)
 ☐ Réaliser un cadencement du thread toutes les secondes
 
-Thread Network:
+Thread Système:
 ☐ Construire le Widget Qt
 ☐ Mettre à jour les données dans le widget
-☐ Construire le Thread Travailleur
+☐ Implémentation d'un QThread (CPUWidget)
 ☐ Réaliser un cadencement du thread toutes les secondes
 
 Multithreadding:

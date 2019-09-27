@@ -37,4 +37,6 @@ class Panel(QtWidgets.QFrame):
         self.panel_layout.addWidget(self.panel_name)
         self.panel_layout.addWidget(self.panel_value)
 
-
+    def refresh(self, _panel_name, _panel_value):
+        self.panel_name.setText(_panel_name)
+        self.panel_value.setText(_panel_value)

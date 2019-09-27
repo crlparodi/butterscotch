@@ -51,6 +51,7 @@ def run():
 
     application = QtWidgets.QApplication(sys.argv)
     butterscotch = Dashboard()
+    butterscotch.show()
     sys.exit(application.exec_())
     
 
