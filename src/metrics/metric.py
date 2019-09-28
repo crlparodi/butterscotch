@@ -41,7 +41,6 @@ class MetricObserver(object):
     a new metric Set with MetricData(s).
 """
 
-
 class MetricProcess(MetricObservable):
     def __init__(self):
         super().__init__()
