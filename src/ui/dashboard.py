@@ -11,13 +11,11 @@ import time as time
 from .board import Board
 from .panel import Panel
 from ..query.expressions import ExpressionParserResolver
-from ..metrics.cpu import CPUBoardProcess
+from ..metrics.cpu import CPUDataProcessing
+from ..metrics.memory import MemoryDataProcessing
+from .. metrics.disk import DiskDataProcessing
 
 class Dashboard(QtWidgets.QMainWindow):
-    """
-        TODO: Better Board Management (Init then Refresh)
-    """
-
     def __init__(self, *args, **kwargs):
         super(Dashboard, self).__init__(*args, **kwargs)
 
@@ -26,16 +24,44 @@ class Dashboard(QtWidgets.QMainWindow):
 
         expr_parser = ExpressionParserResolver()
 
-        self.cpu_board_process = CPUBoardProcess(expr_parser.parse()["cpu"])
+        """
+        Building the CPU Board
+        """
+        #################################################################
+        self.cpu_board_process = CPUDataProcessing(expr_parser.parse()["cpu"])
+        self.cpu_board = self.generate_cpu_board(self.cpu_board_process.generate())
 
         self.cpu_board_process.cpu_ready_signal.connect(self.refresh_cpu_board)
         self.cpu_board_process.start()
+        #################################################################
 
-        self.cpu_board = self.generate_cpu_board(self.cpu_board_process.generate())
+        """
+        Building the Memory Board
+        """
+        #################################################################
+        self.memory_board_process = MemoryDataProcessing(expr_parser.parse()["memory"])
+        self.memory_board = self.generate_memory_board(self.memory_board_process.generate())
+
+        self.memory_board_process.mem_ready_signal.connect(self.refresh_memory_board)
+        self.memory_board_process.start()
+        #################################################################
+
+        """
+        Building the Disk Board
+        """
+        #################################################################
+        self.disk_board_process = DiskDataProcessing(expr_parser.parse()["disk"])
+        self.disk_board = self.generate_disk_board(self.disk_board_process.generate())
+
+        self.disk_board_process.ready.connect(self.refresh_disk_board)
+        self.disk_board_process.start()
+        #################################################################
 
         self.set_UI(
             [
                 self.cpu_board,
+                self.memory_board,
+                self.disk_board
             ]
         )
 
@@ -59,20 +85,54 @@ class Dashboard(QtWidgets.QMainWindow):
 
     def refresh_cpu_board(self, _board_group={}):
         for core_index in range(int(_board_group["CPU_NBR_CORES"][1])):
-            self.cpu_board.panels[f"CPU_CORE_{core_index}_FREQ"].panel_name.setText(
-                _board_group[f"CPU_CORE_{core_index}_FREQ"][0]
-            )
             self.cpu_board.panels[f"CPU_CORE_{core_index}_FREQ"].panel_value.setText(
                 _board_group[f"CPU_CORE_{core_index}_FREQ"][1]
             )
+
+    def generate_memory_board(self, _board_group={}):
+        memory_board = Board(_board_group, "Memory")
+
+        used_ram = Panel(_board_group["USED_RAM"])
+        memory_board.add_item(used_ram, "USED_RAM",  0, 0)
+
+        used_swap = Panel(_board_group["USED_SWAP"])
+        memory_board.add_item(used_swap, "USED_SWAP", 0, 1)
+
+        memory_board.freeze_layout()
+
+        return memory_board
+
+    def refresh_memory_board(self, _board_group={}):
+        self.memory_board.panels["USED_RAM"].panel_value.setText(_board_group["USED_RAM"][1])
+
+        self.memory_board.panels["USED_SWAP"].panel_value.setText(_board_group["USED_SWAP"][1])
+
+    def generate_disk_board(self, _board_group={}):
+        disk_board = Board(_board_group, "Disk")
+
+        read_rate = Panel(_board_group["DISK_RRATE"])
+        disk_board.add_item(read_rate, "DISK_RRATE",  0, 0)
+
+        write_rate = Panel(_board_group["DISK_WRATE"])
+        disk_board.add_item(write_rate, "DISK_WRATE", 0, 1)
+
+        disk_board.freeze_layout()
+
+        return disk_board
+
+    def refresh_disk_board(self, _board_group={}):
+        self.disk_board.panels["DISK_RRATE"].panel_value.setText(_board_group["DISK_RRATE"][1])
+        self.disk_board.panels["DISK_WRATE"].panel_value.setText(_board_group["DISK_WRATE"][1])
 
     def set_UI(self, _boards=[]):
         dashboard_menu = self.menuBar()
         dashboard_central_widget = QtWidgets.QWidget()
         file_menu = dashboard_menu.addMenu("&Fichier")
-        edit_menu = dashboard_menu.addMenu("&Edit")
-        help_menu = dashboard_menu.addMenu("&Help")
         file_menu.addAction("Quitter")
+        edit_menu = dashboard_menu.addMenu("&Edit")
+        edit_menu.addAction("Préférences")
+        help_menu = dashboard_menu.addMenu("&Help")
+        help_menu.addAction("À propos")
 
         dbox = QtWidgets.QVBoxLayout()
         dbox.setContentsMargins(20, 20, 20, 20)

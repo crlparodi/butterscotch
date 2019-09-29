@@ -2,49 +2,19 @@
 
 import pycurl
 import json
-from ..exceptions.exceptions import HTTPError, JSONDataError
-from .http_request import HTTPEngine
+from ..exceptions.exceptions import HTTPError
+from .http_request import HTTPRequester, PROMAPI_CONFIG_SEGMENT
 
 
-def http_address_verification():
-    json_str_io = None # Contains all the JSON Data
-
+def first_connection_test(_http_address):
     try:
-        json_str_io = test_connection("/api/v1/status/config")
+        requester = HTTPRequester(_http_address)
+        json_test = json.load(requester.request(PROMAPI_CONFIG_SEGMENT))
 
-        if json_str_io != None:
-            if check_transaction_success(json_str_io):
-                return True
+        if json_test['status'] == "success":
+            return True
 
-    except HTTPError as ehttp:
-        print("HTTPError - Code", ehttp.code, "-", ehttp.message)
-        return False
-    
-    except JSONDataError as ejson:
-        print("JSONDataError - Code", ejson.code, "-", ejson.message)
+    except HTTPError as e_http:
+        print("HTTPError - ", e_http.code, "-", e_http.message)
         return False
 
-def test_connection(addr):
-    """ 
-    Verifying that the app can access the node
-    
-    :param str addr: The address complement of the node.
-    """
-    downloader = HTTPEngine()
-
-    try:
-        str_io = downloader.request(addr)
-        return str_io
-
-    except pycurl.error as epycurl:
-        raise HTTPError(102, "PYCurl Error : " + str(epycurl))
-    
-
-def check_transaction_success(json_str_io):
-    """ Verifying that the file data is consistent """
-    json_test_data = json.load(json_str_io)
-
-    if json_test_data['status'] == "success":
-        return True
-
-    raise JSONDataError(201, "Inconsistent JSON Data from Node Test")
