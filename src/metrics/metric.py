@@ -7,7 +7,7 @@ module: metric.py
 # -*- coding: utf-8 -*-
 
 import json
-from ..http.http_request import HTTPRequester, PROMETHEUS_API_LINK_SEGMENT
+from ..http.http_request import HTTPRequester, PROMAPI_QUERY_SEGMENT
 from ..exceptions.exceptions import HTTPError
 
 """
@@ -53,8 +53,7 @@ class MetricRequest(MetricObservable):
 
         try:
             json_dict = json.load(HTTPRequester().request(
-                PROMETHEUS_API_LINK_SEGMENT
-                + _expr
+                PROMAPI_QUERY_SEGMENT + _expr
             ))
 
             # Verify that there's no error (parse error for example)

@@ -21,11 +21,12 @@ def get_address_from_config():
 
 class HTTPRequester(object):
     """
-    Built-in HTTP Engine, it allows to download contents through a user provided url.
+    Built-in HTTP Engine, it allows to download contents through a user
+    provided url.
     """
 
-    def __init__(self, _http_address):
-        self.http_node_address = _http_address
+    def __init__(self):
+        self.http_node_address = get_address_from_config()
 
     def request(self, query):
         """

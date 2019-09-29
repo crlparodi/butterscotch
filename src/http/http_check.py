@@ -6,9 +6,9 @@ from ..exceptions.exceptions import HTTPError
 from .http_request import HTTPRequester, PROMAPI_CONFIG_SEGMENT
 
 
-def first_connection_test(_http_address):
+def first_connection_test():
     try:
-        requester = HTTPRequester(_http_address)
+        requester = HTTPRequester()
         json_test = json.load(requester.request(PROMAPI_CONFIG_SEGMENT))
 
         if json_test['status'] == "success":
