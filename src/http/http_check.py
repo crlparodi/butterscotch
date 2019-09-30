@@ -2,49 +2,83 @@
 
 import pycurl
 import json
-from ..exceptions.exceptions import HTTPError, JSONDataError
-from .http_request import HTTPEngine
+from ..exceptions.exceptions import HTTPError
+from .http_request import HTTPRequester
+from .http_config import PROMAPI_READY, PROMAPI_CONFIG_SEGMENT
 
+HTTP_ADDRESS_OK = True
+HTTP_ADDRESS_ERROR = False
 
-def http_address_verification():
-    json_str_io = None # Contains all the JSON Data
-
-    try:
-        json_str_io = test_connection("/api/v1/status/config")
-
-        if json_str_io != None:
-            if check_transaction_success(json_str_io):
-                return True
-
-    except HTTPError as ehttp:
-        print("HTTPError - Code", ehttp.code, "-", ehttp.message)
-        return False
-    
-    except JSONDataError as ejson:
-        print("JSONDataError - Code", ejson.code, "-", ejson.message)
-        return False
-
-def test_connection(addr):
-    """ 
-    Verifying that the app can access the node
-    
-    :param str addr: The address complement of the node.
+def http_address_verification(_http_address=None):
     """
-    downloader = HTTPEngine()
+    Does a first connection with the address to verify if it's OK
+
+    Technically, we request the following link :
+        - http_address + PROMAPI_CONFIG_SEGMENT
+        so for example : http://localhost:9090/api/v1/status/config
+    and regards the status indicated in the JSON stream ("success"|"error"),
+    this function returns ...
+
+    :return HTTP_ADDRESS_OK (True): if the verification is a success
+    :return HTTP_ADDRESS_ERROR (False): if the verification results on an
+                                        "error" status from the JSON
+    """
+    print("Checking the HTTP Address ...")
+
+    # Preparing the request http engine
+    if _http_address:
+        requester = HTTPRequester(_http_address)
+    else:
+        requester = HTTPRequester()
 
     try:
-        str_io = downloader.request(addr)
-        return str_io
+        # First step : Getting the Ready Signal from the Server
+        if http_api_is_ready(requester):
+            # Second step : Getting back the config of the server
+            if http_api_get_config(requester):
+                # If all the requirements are solved
+                return HTTP_ADDRESS_OK
 
-    except pycurl.error as epycurl:
-        raise HTTPError(102, "PYCurl Error : " + str(epycurl))
-    
+    except HTTPError as e_http:
+        print("ERROR : HTTPError ", e_http.code, "-", e_http.message)
+        print("HTTP Address Verification failed...")
 
-def check_transaction_success(json_str_io):
-    """ Verifying that the file data is consistent """
-    json_test_data = json.load(json_str_io)
+    except TypeError as e_type:
+        print("ERROR : TypeError - ", e_type)
+        print("HTTP Address Verification failed...")
 
-    if json_test_data['status'] == "success":
+    return HTTP_ADDRESS_ERROR
+
+
+def http_api_is_ready(_requester):
+    """
+    Getting the ready signal from the server
+
+    :param _requester:
+    :return True: if OK.
+    """
+    if "Ready" in _requester.request(
+            PROMAPI_READY,
+            _check_content_type=True
+    ):
         return True
 
-    raise JSONDataError(201, "Inconsistent JSON Data from Node Test")
+    return False
+
+
+def http_api_get_config(_requester):
+    """
+    Retrieving the configuration of the server
+
+    :param _requester:
+    :return True: if the configuration exists
+    """
+    api_config_json = json.load(_requester.request(
+        PROMAPI_CONFIG_SEGMENT,
+        _check_content_type=True
+    ))
+
+    if api_config_json['data']['yaml']:
+        return True
+
+    return False

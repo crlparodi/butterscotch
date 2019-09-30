@@ -32,7 +32,7 @@ class Panel(QtWidgets.QFrame):
         self.panel_name.setText(_metric_tuple[0])
         self.panel_value.setText(_metric_tuple[1])
 
-        self.panel_value.setFont(QtGui.QFont('SansSerifBold', 16))
+        self.panel_value.setFont(QtGui.QFont('SansSerif', 15))
         self.panel_layout = QtWidgets.QVBoxLayout()
         self.panel_layout.addWidget(self.panel_name)
         self.panel_layout.addWidget(self.panel_value)

@@ -7,22 +7,21 @@ module: cpu.py
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtCore
-from .metric import MetricProcess, MetricPostProcess
+from .metric import MetricRequest, MetricCallback
 from ..utils.conversions import convert_human
 
-class CPUBoardProcess(QtCore.QThread):
+class CPUDataProcessing(QtCore.QThread):
     cpu_ready_signal = QtCore.pyqtSignal(object)
-    return_flag = True
 
     def __init__(self, _expr_dict):
-        super(CPUBoardProcess, self).__init__()
+        super(CPUDataProcessing, self).__init__()
 
         self.expr_dict = _expr_dict
 
         self.metrics = {}
 
-        self.metric_process = MetricProcess()
-        self.metric_post_process = MetricPostProcess()
+        self.metric_process = MetricRequest()
+        self.metric_post_process = MetricCallback()
 
         self.metric_process.add_observer(self.metric_post_process)
 
@@ -39,7 +38,7 @@ class CPUBoardProcess(QtCore.QThread):
 
             final_core_freq_tuple = (
                 f"CPU Core {core_index + 1} Frequency",
-                convert_human(int(core_freq)) + "Hz / " + convert_human(int(max_core_freq)) + "Hz"
+                convert_human(core_freq) + "Hz / " + convert_human(max_core_freq) + "Hz"
             )
             self.metrics[f"CPU_CORE_{core_index}_FREQ"] = final_core_freq_tuple
 
@@ -64,7 +63,7 @@ class CPUBoardProcess(QtCore.QThread):
                 )
                 final_core_freq_tuple = (
                     f"CPU Core {core_index + 1} Frequency",
-                    convert_human(int(core_freq)) + "Hz / " + convert_human(int(max_core_freq)) + "Hz"
+                    convert_human(core_freq) + "Hz / " + convert_human(max_core_freq) + "Hz"
                 )
                 self.metrics[f"CPU_CORE_{core_index}_FREQ"] = final_core_freq_tuple
 

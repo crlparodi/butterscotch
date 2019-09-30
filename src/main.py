@@ -47,6 +47,7 @@ def run():
     db = database.connect_to_db()
 
     if not http_address_verification():
+        print("Failed from connecting to the server, quit.")
         exit()
 
     application = QtWidgets.QApplication(sys.argv)

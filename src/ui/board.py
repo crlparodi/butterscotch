@@ -6,7 +6,7 @@ module: board.py
 
 # -*- coding: utf-8 -*-
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 
 class Board(QtWidgets.QGroupBox):
     def __init__(self, _board, _name, parent=None, *args, **kwargs):
@@ -15,6 +15,7 @@ class Board(QtWidgets.QGroupBox):
 
         # Layout of the Board
         self.layout = QtWidgets.QGridLayout()
+        self.layout.setAlignment(QtCore.Qt.AlignLeft)
 
         # There's only one key at the top of the board
         # But this is the only way to get back the name of the Key

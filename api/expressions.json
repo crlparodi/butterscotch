@@ -30,7 +30,7 @@
     "name": "Memory",
     "panels": [
       {
-        "key": "RAM_USED",
+        "key": "USED_RAM",
         "desc": "Used Ram",
         "targets": [
           {
@@ -52,7 +52,7 @@
         ]
       },
       {
-        "key": "SWAP_USED",
+        "key": "USED_SWAP",
         "desc": "Used Swap",
         "targets": [
           {
@@ -96,7 +96,7 @@
         "targets": [
           {
             "key": "USED_ROOTFS",
-            "expression": "rate(node_disk_written_bytes_total{device=\"sda\"}[10s])"
+            "expression": ""
           }
         ]
       }

@@ -2,7 +2,7 @@
 
 import json
 from ..metrics.metric import *
-from ..metrics.cpu import CPUBoardProcess
+from ..metrics.cpu import CPUDataProcessing
 
 API_EXPR_PATH = "api/expressions.json"
 

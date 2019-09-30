@@ -7,13 +7,16 @@ module: metric.py
 # -*- coding: utf-8 -*-
 
 import json
-from ..http.http_request import HTTPEngine, PROMETHEUS_API_LINK_SEGMENT
+from ..http.http_request import HTTPRequester
+from ..http.http_config import PROMAPI_QUERY_SEGMENT
 from ..exceptions.exceptions import HTTPError
 
 """
     Metrics processing observer pattern.
-    These classes allows to the processing metrics controllers to update the data
-    only when the expressions are resolved and stored into the MetricSet/Data classes.
+    These classes allows to the processing metrics controllers to update  
+    the data.
+    only when the expressions are resolved and stored into the  
+    MetricSet/Data classes.
 """
 
 class MetricObservable(object):
@@ -32,33 +35,51 @@ class MetricObservable(object):
 
 
 class MetricObserver(object):
-    def update(self):
+    def update(self, _value):
         raise NotImplementedError
 
 
 """
     Metrics Controller classes, theses classes are called when we wants to get
-    a new metric Set with MetricData(s).
+    a new metric value.
 """
 
-class MetricProcess(MetricObservable):
+class MetricRequest(MetricObservable):
     def __init__(self):
         super().__init__()
+        self.data_valid = False
 
     def process(self, _expr, _value_index=0):
-        try:
-            hardware_json_data = json.load(HTTPEngine().request(PROMETHEUS_API_LINK_SEGMENT + _expr))
-            value = hardware_json_data['data']['result'][_value_index]["value"][1]
-            self.data_ready = True
-        except HTTPError as ehttp:
-            print(f"Failed to download the data for {_expr}, passing...")
-        except json.JSONDecodeError as ejson:
-            print(f"Failed to get metric for {_expr}, passing...")
+        value = "--"
 
-        if self.data_ready:
+        try:
+            json_dict = json.load(HTTPRequester().request(
+                PROMAPI_QUERY_SEGMENT + _expr
+            ))
+
+            # Verify that there's no error (parse error for example)
+            if json_dict["status"] == "success":
+                # Verify that the query is correct (so the query returns data)
+                if json_dict['data']['result']:
+                    value = json_dict['data']['result'][_value_index][
+                        "value"][1]
+                    self.data_valid = True
+                else:
+                    raise KeyError
+            else:
+                raise HTTPError
+
+        except HTTPError:
+            print(f"Failed to download the data for {_expr}, passing...")
+        except json.JSONDecodeError:
+            print(f"Failed to decode JSON for {_expr}, passing...")
+        except KeyError:
+            print(f"No data for {_expr}, passing...")
+
+        if self.data_valid:
             return self.notify(value)
 
 
-class MetricPostProcess(MetricObserver):
+class MetricCallback(MetricObserver):
     def update(self, _value):
         return _value
