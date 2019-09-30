@@ -2,7 +2,7 @@
 
 import os, sys
 from PyQt5 import QtWidgets
-from src.http.http_check import first_connection_test
+from src.http.http_check import http_address_verification
 from src.ui.dashboard import Dashboard
 import src.database.database as database
 
@@ -46,7 +46,8 @@ def run():
     database.create_db()
     db = database.connect_to_db()
 
-    if not first_connection_test():
+    if not http_address_verification():
+        print("Failed from connecting to the server, quit.")
         exit()
 
     application = QtWidgets.QApplication(sys.argv)

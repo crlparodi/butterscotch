@@ -7,7 +7,8 @@ module: metric.py
 # -*- coding: utf-8 -*-
 
 import json
-from ..http.http_request import HTTPRequester, PROMAPI_QUERY_SEGMENT
+from ..http.http_request import HTTPRequester
+from ..http.http_config import PROMAPI_QUERY_SEGMENT
 from ..exceptions.exceptions import HTTPError
 
 """

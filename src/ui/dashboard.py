@@ -19,6 +19,8 @@ class Dashboard(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
         super(Dashboard, self).__init__(*args, **kwargs)
 
+        print("Generating the dashboard ...")
+
         self.setGeometry(200, 200, 500, 300)
         self.setWindowTitle("butterscotch - Dashboard")
 

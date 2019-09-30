@@ -2,6 +2,7 @@ import sqlite3
 import socket
 
 def create_db():
+    print("Creating the database ...")
     filename = "data/" + socket.gethostname() + ".db"
     db_file = open(filename, "w")
     db_file.close()

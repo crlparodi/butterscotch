@@ -1,5 +1,5 @@
 import unittest
-from ..src.http.http_check import first_connection_test
+from src.http.http_check import http_address_verification
 
 LOCAL_TEST_ADRESS = (
     ("http://localhost:9090/api/v1/status/config", True),
@@ -15,7 +15,7 @@ LOCAL_TEST_ADRESS = (
 class TestHTTPConnection(unittest.TestCase):
     def connection_test(self):
         for ADDRESS in LOCAL_TEST_ADRESS:
-            self.assertEqual(first_connection_test(ADDRESS[0]), ADDRESS[1])
+            self.assertEqual(http_address_verification(ADDRESS[0]), ADDRESS[1])
 
 
 if __name__ == '__main__':
