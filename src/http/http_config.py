@@ -8,6 +8,9 @@ module: http_config.py
 
 import configparser
 
+HTTP_ADDRESS_OK = True
+HTTP_ADDRESS_ERROR = False
+
 PROMAPI_FALSE_REQUEST = "/"
 PROMAPI_READY = "/-/ready"
 PROMAPI_CONFIG_SEGMENT = "/api/v1/status/config"

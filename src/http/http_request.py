@@ -9,7 +9,7 @@ module: http_request.py
 import pycurl
 from io import BytesIO, StringIO
 from .http_config import get_address_from_config
-from ..exceptions.exceptions import HTTPError
+from src.exceptions.exceptions import HTTPError
 
 class HTTPRequester(object):
     """

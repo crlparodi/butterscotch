@@ -7,7 +7,6 @@ module: panel.py
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtWidgets, QtCore, QtGui
-from ..utils.conversions import convert_human
 
 class Panel(QtWidgets.QFrame):
     def __init__(self, _metric_tuple, _index=0, parent=None, *args, **kwargs):

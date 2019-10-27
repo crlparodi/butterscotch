@@ -95,8 +95,12 @@
         "desc": "Used Root FileSystem",
         "targets": [
           {
-            "key": "USED_ROOTFS",
-            "expression": ""
+            "key": "AVAIL_ROOTFS",
+            "expression": "node_filesystem_avail_bytes"
+          },
+          {
+            "key": "TOTAL_ROOTFS",
+            "expression": "node_filesystem_size_bytes"
           }
         ]
       }

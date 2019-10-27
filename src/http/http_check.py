@@ -2,12 +2,10 @@
 
 import pycurl
 import json
-from ..exceptions.exceptions import HTTPError
+from src.exceptions.exceptions import HTTPError
 from .http_request import HTTPRequester
-from .http_config import PROMAPI_READY, PROMAPI_CONFIG_SEGMENT
-
-HTTP_ADDRESS_OK = True
-HTTP_ADDRESS_ERROR = False
+from .http_config import PROMAPI_READY, PROMAPI_CONFIG_SEGMENT, \
+    HTTP_ADDRESS_OK, HTTP_ADDRESS_ERROR
 
 def http_address_verification(_http_address=None):
     """
@@ -37,6 +35,7 @@ def http_address_verification(_http_address=None):
             # Second step : Getting back the config of the server
             if http_api_get_config(requester):
                 # If all the requirements are solved
+                print("HTTP Address Check Succeed ...")
                 return HTTP_ADDRESS_OK
 
     except HTTPError as e_http:

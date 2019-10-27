@@ -12,8 +12,8 @@ CONFIG_FOLDER_PATH = "api/"
 CONFIG_FILE = "api.ini"
 
 def init_directories():
-    """ 
-    Initiation of the configuration and data directories, 
+    """
+    Initiation of the configuration and data directories,
     creation if not present in the project. \n
     Checking the configuration files.
 
@@ -54,7 +54,7 @@ def run():
     butterscotch = Dashboard()
     butterscotch.show()
     sys.exit(application.exec_())
-    
+
 
 if __name__ == '__main__':
     run()

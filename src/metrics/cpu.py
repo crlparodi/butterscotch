@@ -8,7 +8,7 @@ module: cpu.py
 
 from PyQt5 import QtCore
 from .metric import MetricRequest, MetricCallback
-from ..utils.conversions import convert_human
+from src.utils.conversions import convert_human
 
 class CPUDataProcessing(QtCore.QThread):
     cpu_ready_signal = QtCore.pyqtSignal(object)
@@ -33,8 +33,8 @@ class CPUDataProcessing(QtCore.QThread):
         self.metrics["CPU_NBR_CORES"] = nbr_cores_tuple
 
         for core_index in range(int(nbr_cores_tuple[1])):
-            core_freq = "0"
-            max_core_freq = "0"
+            core_freq = 0
+            max_core_freq = 0
 
             final_core_freq_tuple = (
                 f"CPU Core {core_index + 1} Frequency",
@@ -48,7 +48,8 @@ class CPUDataProcessing(QtCore.QThread):
         while True:
             nbr_cores_tuple = (
                 "Total number of Cores",
-                self.metric_process.process(self.expr_dict["panels"][0]["targets"][0]["expression"])
+                self.metric_process.process(self.expr_dict["panels"][0][
+                                                "targets"][0]["expression"])
             )
             self.metrics["CPU_NBR_CORES"] = nbr_cores_tuple
 
@@ -61,11 +62,18 @@ class CPUDataProcessing(QtCore.QThread):
                     self.expr_dict["panels"][1]["targets"][1]["expression"],
                     core_index
                 )
+
+                core_freq = eval(core_freq)
+                max_core_freq = eval(max_core_freq)
+
                 final_core_freq_tuple = (
                     f"CPU Core {core_index + 1} Frequency",
-                    convert_human(core_freq) + "Hz / " + convert_human(max_core_freq) + "Hz"
+                    convert_human(core_freq) + "Hz / " + convert_human(
+                        max_core_freq) + "Hz"
                 )
-                self.metrics[f"CPU_CORE_{core_index}_FREQ"] = final_core_freq_tuple
+
+                self.metrics[f"CPU_CORE_{core_index}_FREQ"] = \
+                    final_core_freq_tuple
 
             self.cpu_ready_signal.emit(self.metrics)
             self.sleep(1)
