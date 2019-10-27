@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import json
-from ..metrics.metric import *
-from ..metrics.cpu import CPUDataProcessing
+from src.metrics.metric import *
+from src.metrics.cpu import CPUDataProcessing
 
 API_EXPR_PATH = "api/expressions.json"
 

@@ -8,7 +8,7 @@ module: memory.py
 
 from PyQt5 import QtCore
 from .metric import MetricRequest, MetricCallback
-from ..utils.conversions import convert_percent
+from src.utils.conversions import convert_percent
 
 class MemoryDataProcessing(QtCore.QThread):
     mem_ready_signal = QtCore.pyqtSignal(object)
@@ -46,11 +46,10 @@ class MemoryDataProcessing(QtCore.QThread):
                     eval(self.metric_process.process(self.expr_dict["panels"][0]["targets"][3]["expression"]))
                 )
             used_ram_percentage = used_ram / eval(self.metric_process.process(self.expr_dict["panels"][0]["targets"][0]["expression"])) * 100
-            used_ram_percentage_str = str(used_ram_percentage)
 
             used_ram_tuple = (
                 "Used RAM",
-                f"{convert_percent(used_ram_percentage_str)} %"
+                f"{convert_percent(used_ram_percentage)} %"
             )
             #################################################################
 
@@ -63,11 +62,10 @@ class MemoryDataProcessing(QtCore.QThread):
                 eval(self.metric_process.process(self.expr_dict["panels"][1]["targets"][1]["expression"]))
 
             used_swap_percentage = used_swap / eval(self.metric_process.process(self.expr_dict["panels"][1]["targets"][0]["expression"])) * 100
-            used_swap_percentage_str = str(used_swap_percentage)
 
             used_swap_tuple = (
                 "Used Swap",
-                f"{convert_percent(used_swap_percentage_str)} %"
+                f"{convert_percent(used_swap_percentage)} %"
             )
             #################################################################
 

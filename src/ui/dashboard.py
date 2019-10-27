@@ -10,10 +10,10 @@ from PyQt5 import QtWidgets
 import time as time
 from .board import Board
 from .panel import Panel
-from ..query.expressions import ExpressionParserResolver
-from ..metrics.cpu import CPUDataProcessing
-from ..metrics.memory import MemoryDataProcessing
-from .. metrics.disk import DiskDataProcessing
+from src.query.expressions import ExpressionParserResolver
+from src.metrics.cpu import CPUDataProcessing
+from src.metrics.memory import MemoryDataProcessing
+from src.metrics.disk import DiskDataProcessing
 
 class Dashboard(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -118,6 +118,9 @@ class Dashboard(QtWidgets.QMainWindow):
         write_rate = Panel(_board_group["DISK_WRATE"])
         disk_board.add_item(write_rate, "DISK_WRATE", 0, 1)
 
+        used_rootfs = Panel(_board_group["USED_ROOTFS"])
+        disk_board.add_item(used_rootfs, "USED_ROOTFS", 0, 2)
+
         disk_board.freeze_layout()
 
         return disk_board
@@ -125,6 +128,8 @@ class Dashboard(QtWidgets.QMainWindow):
     def refresh_disk_board(self, _board_group={}):
         self.disk_board.panels["DISK_RRATE"].panel_value.setText(_board_group["DISK_RRATE"][1])
         self.disk_board.panels["DISK_WRATE"].panel_value.setText(_board_group["DISK_WRATE"][1])
+        self.disk_board.panels["USED_ROOTFS"].panel_value.setText(
+            _board_group["USED_ROOTFS"][1])
 
     def set_UI(self, _boards=[]):
         dashboard_menu = self.menuBar()
@@ -144,9 +149,3 @@ class Dashboard(QtWidgets.QMainWindow):
 
         dashboard_central_widget.setLayout(dbox)
         self.setCentralWidget(dashboard_central_widget)
-
-
-
-
-
-

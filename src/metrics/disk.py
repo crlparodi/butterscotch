@@ -8,7 +8,7 @@ module: disk.py
 
 from PyQt5 import QtCore
 from .metric import MetricRequest, MetricCallback
-from ..utils.conversions import convert_human, convert_percent
+from src.utils.conversions import convert_human, convert_percent
 
 class DiskDataProcessing(QtCore.QThread):
     ready = QtCore.pyqtSignal(object)
@@ -40,6 +40,9 @@ class DiskDataProcessing(QtCore.QThread):
             #################################################################
             r_rate_data = self.request.process(self.expressions["panels"][0]["targets"][0]["expression"])
             w_rate_data = self.request.process(self.expressions["panels"][1]["targets"][0]["expression"])
+
+            r_rate_data = eval(r_rate_data)
+            w_rate_data = eval(w_rate_data)
             #################################################################
 
             """
@@ -60,7 +63,26 @@ class DiskDataProcessing(QtCore.QThread):
             Request and process the Used RootFS data
             """
             #################################################################
+            rootfs_avail = self.request.process(self.expressions[
+                                                         "panels"][
+                                                    2]["targets"][0][
+                                                    "expression"], 1)
+            rootfs_total = self.request.process(self.expressions[
+                                                         "panels"][
+                                                    2]["targets"][1][
+                                                    "expression"], 1)
 
+            rootfs_avail = eval(rootfs_avail)
+            rootfs_total = eval(rootfs_total)
+
+            rootfs_used = rootfs_total - rootfs_avail
+            rootfs_used_percent = convert_percent((rootfs_used /
+                                                       rootfs_total) * 100)
+
+            used_rootfs = (
+                "Used Root FileSystem",
+                f"{rootfs_used_percent} %"
+            )
             #################################################################
 
             """
@@ -69,6 +91,7 @@ class DiskDataProcessing(QtCore.QThread):
             #################################################################
             self.metrics["DISK_RRATE"] = r_rate
             self.metrics["DISK_WRATE"] = w_rate
+            self.metrics["USED_ROOTFS"] = used_rootfs
             #################################################################
 
             self.ready.emit(self.metrics)

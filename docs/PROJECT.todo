@@ -1,10 +1,12 @@
 Sur le tas:
-    ☐ Meilleure gestion des Boards (Voir suivant)
-    ☐ Prévoir une process en deux temps : Un pour l'initialisation générale, Un pour l'actualisation
+    ✔ Meilleure gestion des Boards (Voir suivant) @done(19-09-30 11:04)
+    ✔ Prévoir une process en deux temps : Un pour l'initialisation générale, Un pour l'actualisation @done(19-09-30 11:04)
     ☐ Possibilité de retrouver des métriques selon des paramètres spécifiques (instance, core_cpu, ou bien point de montage par exemple)
     ✔ Améliorer la robustesse du MetricRequest (URGENT) @done(19-09-29 17:16)
-    ☐ Améliorer le module de requetes (pycurl), gérer les erreurs et exceptions @started(19-09-29 17:39)
+    ✔ Améliorer le module de requetes (pycurl), gérer les erreurs et exceptions @done(19-09-30 11:04)
     ☐ Mettre en place le système de packaging (https://python-packaging.readthedocs.io/en/latest/minimal.html)
+    ☐ Travailler le logging au lieu de mettre 50 milliairs de prints
+    ☐ Définir des constantes en Python
 
 Board Préconfiguré CPU:
     ✔ Construire le Board Qt @done(19-09-28 19:43)
@@ -19,9 +21,9 @@ Board Préconfiguré RAM:
     ✔ Réaliser un cadencement du thread toutes les secondes @done(19-09-28 19:43)
 
 Board Préconfiguré Disk:
-    ☐ Construire le Board Qt
-    ☐ Mettre à jour les données dans le widget
-    ☐ Implémentation d'un QThread
+    ✔ Construire le Board Qt @done(19-10-06 20:36)
+    ✔ Mettre à jour les données dans le widget @done(19-10-06 20:36)
+    ✔ Implémentation d'un QThread @done(19-10-06 20:36)
     ✔ Réaliser un cadencement du thread toutes les secondes @done(19-09-28 19:44)
 
 Board Préconfiguré Système:
@@ -29,6 +31,15 @@ Board Préconfiguré Système:
     ☐ Mettre à jour les données dans le widget
     ☐ Implémentation d'un QThread
     ☐ Réaliser un cadencement du thread toutes les secondes
+
+Boards Génériques (Pour vraiment plus tard...):
+    ☐ Prévoir des boards génériques avec des panels génériques.
+    ☐ Possibilité d'ajouter ou de supprimer des panels
+
+Graphs et Jauges:
+    ☐ Apprendre les graphs sous Qt
+    ☐ Construire des Jauges basés sur des pourcentages (commencer par le duo RAM/Swap)
+    ☐ Construire des graphs temporels basés sur des données de type "time-series"
 
 Multithreadding:
     ✔ Concurrencement des opérations @done(19-09-28 19:44)
